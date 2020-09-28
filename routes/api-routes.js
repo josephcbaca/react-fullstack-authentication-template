@@ -7,89 +7,6 @@ module.exports = function (app) {
     res.json({ Result: "OK! React can connect to the backend server." });
   });
 
-  app.get("/api/games", function (req, res) {
-    db.Game.findAll({
-      include: [{
-        as: 'host',
-        model: db.Player,
-        attributes: ['id', 'userName']
-      }, {
-        as: 'player_1',
-        model: db.Player,
-        attributes: ['id', 'userName']
-      }, {
-        as: 'player_2',
-        model: db.Player,
-        attributes: ['id', 'userName']
-      }, {
-        as: 'player_3',
-        model: db.Player,
-        attributes: ['id', 'userName']
-      }
-      ],
-      attributes: ['id', 'gameTime', 'golfCourse']
-    }).then(games => res.json(games));
-  });
-
-  app.post("/api/newgame", function (req, res) {
-    if (!req.user) {
-      res.json({ msg: "Not logged in!" });
-    } else {
-      db.Game.create({
-        gameTime: req.body.gameTime,
-        host_id: req.user.id,
-        golfCourse: req.body.golfCourse
-      }).then(newGame => res.json(newGame));
-    }
-  });
-
-  app.put("/api/joingame", function (req, res) {
-    // for actuall put request, req.body needs: 
-    // id(game id), user_id, slot_number (the id of empty player slot, e.g. player_id_2, player_id_3)
-    console.log(req);
-    if (!req.user) {
-      res.json({ msg: "Not logged in!" });
-    } else {
-      // e.g if req.body.slot_number is "player_id_2"
-      // pubBody will be {player_id_2: user_id}
-      const putBody = {};
-      putBody[req.body.slot_number] = req.user.id;
-
-      db.Game.update(putBody, {
-        where: {
-          id: req.body.id
-        }
-      }).then(result => {
-          db.Game.findOne({
-            where: {
-              id: req.body.id
-            },
-            include: [{
-              as: 'host',
-              model: db.Player,
-              attributes: ['id', 'userName']
-            }, {
-              as: 'player_1',
-              model: db.Player,
-              attributes: ['id', 'userName']
-            }, {
-              as: 'player_2',
-              model: db.Player,
-              attributes: ['id', 'userName']
-            }, {
-              as: 'player_3',
-              model: db.Player,
-              attributes: ['id', 'userName']
-            }
-            ],
-            attributes: ['id', 'gameTime', 'golfCourse']
-          }).then(game=> {
-            res.json(game);
-          })
-        } 
-      ).catch(err=> res.json(err));
-    }
-  });
   // Using the passport.authenticate middleware with our local strategy.
   // If the user has valid login credentials, send them to the members page.
   // Otherwise the user will be sent an error
@@ -102,24 +19,13 @@ module.exports = function (app) {
   // otherwise send back an error
   app.post("/api/signup", (req, res) => {
     console.log(req.body);
-    db.Player.create({
+    db.User.create({
+      firstName: req.body.firstName,
+      middleName: req.body.middleName,
+      lastName: req.body.lastName,
       userName: req.body.userName,
       email: req.body.email,
       password: req.body.password
-    })
-      .then(() => res.end())
-      .catch(err => {
-        res.status(401).json(err);
-      });
-  });
-
-  // Posts a new hosted game to database
-  app.post("/api/host-new-game", (req, res) => {
-    console.log(req.body);
-    db.Game.create({
-      gameTime: req.body.gameTime,
-      golfCourse: req.body.golfCourse,
-      host_id: req.body.host_id,
     })
       .then(() => res.end())
       .catch(err => {

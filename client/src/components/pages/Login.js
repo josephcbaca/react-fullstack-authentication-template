@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
-import Navbar from "../../navbar.js"
+import Navbar from "../Navbar.js"
 import axios from 'axios';
 
 function Login(props) {
@@ -53,7 +53,7 @@ function Login(props) {
             </div>
           </div>
           <div className="row">
-            <button onClick={loginUser} className="btn btn-outline-success site-button mb-2" type="submit">
+            <button onClick={loginUser} className="btn btn-outline-dark site-button mb-2" type="submit">
               Submit
           </button>
           </div>

@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from "react";
 import "./App.css";
-import Home from "./components/pages/Home"
 import { Route } from 'react-router-dom';
 import Login from "./components/pages/Login";
-import Scorecard from "./components/pages/Scorecard/index";
-import BrowseGame from "./components/pages/BrowseGame"
-import SignUp from "./components/pages/SignUp"
-import CreateGame from "./components/pages/CreateGame"
+import SignUp from "./components/pages/SignUp";
+import Home from "./components/pages/Home"
 import axios from "axios";
 
 
@@ -38,12 +35,9 @@ const App = () =>{
 
   return(
     <div>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/login" render={()=> <Login updateUser={updateUser} />}/>
-      <Route exact path="/scorecard" component={Scorecard} />
-      <Route exact path="/browse-game" render={()=> <BrowseGame loggedIn={loggedIn} currentUser = {currentUser}/>}/>
+      <Route exact path="/" render={()=> <Login updateUser={updateUser} />}/>
       <Route exact path="/sign-up" component={SignUp} />
-      <Route exact path="/create-game" render={()=> <CreateGame loggedIn={loggedIn} currentUser = {currentUser}/>}/>
+      <Route exact path="/home" render={()=> <Home loggedIn={loggedIn} currentUser = {currentUser}/>}/>
     </div>
     );
     
