@@ -20,7 +20,7 @@ function Login(props) {
       console.log(res);
       if (res.status === 200) {
         props.updateUser(res.data)
-        history.push("/browse-game");
+        history.push("/home");
       }
     }).catch(err => console.log(err));
   }
